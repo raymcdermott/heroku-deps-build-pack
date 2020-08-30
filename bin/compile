@@ -75,6 +75,16 @@ fi
 
 echo | clojure -Sforce $a_Opts
 
+# populate profile.d
+PROFILE_PATH="$BUILD_DIR/.profile.d/clojure.sh"
+mkdir -p $(dirname $PROFILE_PATH)
+echo 'export PATH="$HOME/.heroku/clj/bin:$HOME/.jdk/bin:$PATH"' >> $PROFILE_PATH
+
+# rewrite Clojure CLI path
+mv $BUILD_DIR/.heroku/clj/bin/clojure $BUILD_DIR/.heroku/clj/bin/clojure.old
+cat $BUILD_DIR/.heroku/clj/bin/clojure.old | sed -e "s/\/tmp\/$(basename $BUILD_DIR)/\/app/g" > $BUILD_DIR/.heroku/clj/bin/clojure
+chmod +x $BUILD_DIR/.heroku/clj/bin/clojure
+
 # repack cache with new assets
 mkdir -p $CACHE_DIR
 for DIR in $CACHED_DIRS; do
