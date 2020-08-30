@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+# bin/compile <build-dir> <cache-dir>
+
+# fail fast
+set -e
+
+BPLOG_PREFIX="clojure-tools-deps"
+
+# parse args
+export BUILD_DIR=$1
+export CACHE_DIR=$2
+export ENV_DIR=$3
+
+BP_DIR=$(cd $(dirname $0)/..; pwd)
+BIN_DIR=$BP_DIR/bin
+LIB_DIR=$BP_DIR/lib
+
+source $LIB_DIR/common.sh
+source <(curl --retry 3 -fsSL $BUILDPACK_STDLIB_URL)
+
+export_env $ENV_DIR "." "JAVA_OPTS"
+
+# Install JDK from jvm-common
+install_jdk ${BUILD_DIR}
+
+# Run clojure install script 
+CLOJURE_CLI_VERSION="${CLOJURE_CLI_VERSION:-1.10.1.561}"
+echo "-----> Installing Clojure $CLOJURE_CLI_VERSION CLI tools"
+CLOJURE_INSTALL_NAME="linux-install-${CLOJURE_CLI_VERSION}.sh"
+CLOJURE_INSTALL_URL="https://download.clojure.org/install/$CLOJURE_INSTALL_NAME"
+curl --retry 3 -sfL --max-time 60 -o "/tmp/$CLOJURE_INSTALL_NAME" "$CLOJURE_INSTALL_URL"
+chmod +x /tmp/$CLOJURE_INSTALL_NAME
+mkdir -p $BUILD_DIR/.heroku/clj
+"/tmp/$CLOJURE_INSTALL_NAME" --prefix $BUILD_DIR/.heroku/clj 2>/dev/null | sed -u 's/^/       /'
+chmod +x $BUILD_DIR/.heroku/clj/bin/*
+export PATH=$BUILD_DIR/.heroku/clj/bin:$PATH
+
+# unpack existing cache
+CACHED_DIRS=".m2 .cpcache"
+for DIR in $CACHED_DIRS; do
+  if [ ! -d $BUILD_DIR/$DIR ]; then
+    cache_copy $DIR $CACHE_DIR $BUILD_DIR
+  fi
+done
+
+echo "-----> Building with Tools Deps"
+
+# extract environment
+if [ -d "${ENV_DIR}" ]; then
+  config_vars="ALIASES"
+
+  if [ -r "${ENV_DIR}/BUILD_CONFIG_ALLOWLIST" ]; then
+    config_vars=$(cat "${ENV_DIR}/BUILD_CONFIG_ALLOWLIST")
+
+  # Backwards compatibility for legacy configuration
+  elif [ -r "${ENV_DIR}/BUILD_CONFIG_WHITELIST" ]; then
+    config_vars=$(cat "${ENV_DIR}/BUILD_CONFIG_WHITELIST")
+  fi
+
+  for config_var in $config_vars; do
+      if [ -r "${ENV_DIR}/${config_var}" ]; then
+          export "${config_var}=$(cat "${ENV_DIR}/${config_var}")"
+      fi
+  done
+fi
+
+a_Opts=""
+
+aliases=${ALIASES}
+
+if [[ -n $aliases ]]
+then
+    a_Opts="-A$aliases"
+fi
+
+echo | clojure -Sforce $a_Opts
+
+# repack cache with new assets
+mkdir -p $CACHE_DIR
+for DIR in $CACHED_DIRS; do
+  cache_copy $DIR $BUILD_DIR $CACHE_DIR
+done
+

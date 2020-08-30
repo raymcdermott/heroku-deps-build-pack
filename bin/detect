@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# this pack is valid for apps with a deps.edn in the root
+if [ -f $1/deps.edn ]; then
+  echo "Clojure (tools deps)"
+  exit 0
+else
+  (>&2 echo "Could not find a 'deps.edn' file! Please ensure it exists and is checked into Git.")
+  exit 1
+fi

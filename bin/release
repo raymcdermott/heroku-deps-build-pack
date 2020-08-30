@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# bin/release <build-dir>
+
+export BUILD_DIR=$1
+
+a_Opts=""
+
+aliases=${ALIASES}
+
+if [[ -n $aliases ]]
+then
+    a_Opts="-A$aliases"
+fi
+
+# Java opts
+javaOpts=${JAVA_OPTS}
+
+j_Opts=""
+
+if [[ -n $javaOpts ]]
+then
+  # Split Java opts into an array and prepend -J to each opt
+  read -ra optsArray <<< $javaOpts
+  j_Opts=$(for j in "${optsArray[@]}" ; do echo "-J$j" ; done)
+fi
+
+
+if [ ! -f $BUILD_DIR/Procfile ]; then
+  cat <<EOF
+---
+config_vars:
+default_process_types:
+EOF
+    echo "  web: clojure $j_Opts $a_Opts"
+fi
+
+
+
