@@ -73,7 +73,7 @@ then
     a_Opts="-A$aliases"
 fi
 
-echo | clojure -Sforce $a_Opts
+echo | (cd $BUILD_DIR && clojure -Sforce $a_Opts)
 
 # populate profile.d
 PROFILE_PATH="$BUILD_DIR/.profile.d/clojure.sh"
