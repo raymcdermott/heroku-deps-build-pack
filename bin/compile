@@ -73,10 +73,11 @@ then
     aliases="-A$aliases_env"
 fi
 
-jvm_opts="-J-Duser.home=$BUILD_DIR -J-Xmx512m"
-
 set -x
-(cd $BUILD_DIR && clojure $jvm_opts $aliases)
+
+export M2_REPO=$BUILD_DIR/.m2
+
+(cd $BUILD_DIR && clojure $aliases)
 
 # populate profile.d
 PROFILE_PATH="$BUILD_DIR/.profile.d/clojure.sh"
@@ -88,10 +89,11 @@ mv $BUILD_DIR/.heroku/clj/bin/clojure $BUILD_DIR/.heroku/clj/bin/clojure.old
 cat $BUILD_DIR/.heroku/clj/bin/clojure.old | sed -e "s/\/tmp\/$(basename $BUILD_DIR)/\/app/g" > $BUILD_DIR/.heroku/clj/bin/clojure
 chmod +x $BUILD_DIR/.heroku/clj/bin/clojure
 
+find $BUILD_DIR -type d
+
 # repack cache with new assets
 mkdir -p $CACHE_DIR
 for DIR in $CACHED_DIRS; do
-  ls -l $DIR
   cache_copy $DIR $BUILD_DIR $CACHE_DIR
 done
 
