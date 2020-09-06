@@ -75,6 +75,7 @@ fi
 
 jvm_opts="-J-Duser.home=$BUILD_DIR -J-Xmx512m"
 
+set -x
 (cd $BUILD_DIR && clojure $jvm_opts $aliases)
 
 # populate profile.d
