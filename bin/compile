@@ -37,10 +37,8 @@ export PATH=$BUILD_DIR/.heroku/clj/bin:$PATH
 
 set -x
 
-export M2_REPO=$BUILD_DIR/.m2
-
 # unpack existing cache
-CACHED_DIRS=".m2 .cpcache"
+CACHED_DIRS="$HOME/.m2 .cpcache"
 for DIR in $CACHED_DIRS; do
   if [ ! -d $BUILD_DIR/$DIR ]; then
     cache_copy $DIR $CACHE_DIR $BUILD_DIR
