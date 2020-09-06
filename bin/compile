@@ -35,8 +35,6 @@ mkdir -p $BUILD_DIR/.heroku/clj
 chmod +x $BUILD_DIR/.heroku/clj/bin/*
 export PATH=$BUILD_DIR/.heroku/clj/bin:$PATH
 
-set -x
-
 # unpack existing cache
 cache_copy .cpcache $CACHE_DIR $BUILD_DIR
 cache_copy .m2 $CACHE_DIR $HOME
@@ -62,16 +60,14 @@ if [ -d "${ENV_DIR}" ]; then
   done
 fi
 
-aliases="-A:test"
-
 aliases_env=${BUILD_ALIASES}
 
 if [[ -n $aliases_env ]]
 then
     aliases="-A$aliases_env"
+    (cd $BUILD_DIR && clojure $aliases)
 fi
 
-(cd $BUILD_DIR && clojure $aliases)
 
 # populate profile.d
 PROFILE_PATH="$BUILD_DIR/.profile.d/clojure.sh"
