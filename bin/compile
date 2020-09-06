@@ -35,6 +35,10 @@ mkdir -p $BUILD_DIR/.heroku/clj
 chmod +x $BUILD_DIR/.heroku/clj/bin/*
 export PATH=$BUILD_DIR/.heroku/clj/bin:$PATH
 
+set -x
+
+export M2_REPO=$BUILD_DIR/.m2
+
 # unpack existing cache
 CACHED_DIRS=".m2 .cpcache"
 for DIR in $CACHED_DIRS; do
@@ -72,10 +76,6 @@ if [[ -n $aliases_env ]]
 then
     aliases="-A$aliases_env"
 fi
-
-set -x
-
-export M2_REPO=$BUILD_DIR/.m2
 
 (cd $BUILD_DIR && clojure $aliases)
 
