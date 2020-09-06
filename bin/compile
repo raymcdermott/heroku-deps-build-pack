@@ -73,7 +73,9 @@ then
     a_Opts="-A$aliases"
 fi
 
-echo | (cd $BUILD_DIR && clojure $a_Opts)
+jvm_opts="-J-Duser.home=$BUILD_DIR -J-Xmx512m"
+
+(cd $BUILD_DIR && clojure $jvm_jvm_opts $a_Opts)
 
 # populate profile.d
 PROFILE_PATH="$BUILD_DIR/.profile.d/clojure.sh"
