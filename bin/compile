@@ -82,4 +82,6 @@ chmod +x $BUILD_DIR/.heroku/clj/bin/clojure
 # repack cache with new assets
 cache_copy .cpcache $BUILD_DIR $CACHE_DIR
 cache_copy .m2 $HOME $CACHE_DIR
+cache_copy .m2 $BUILD_DIR $CACHE_DIR
 
+ls -l $BUILD_DIR/.m2
