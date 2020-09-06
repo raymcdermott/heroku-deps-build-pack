@@ -64,16 +64,18 @@ if [ -d "${ENV_DIR}" ]; then
   done
 fi
 
-a_Opts=""
+a_Opts="-A:test"
 
-aliases=${ALIASES}
+aliases=${BUILD_ALIASES}
 
 if [[ -n $aliases ]]
 then
     a_Opts="-A$aliases"
 fi
 
-echo | (cd $BUILD_DIR && clojure -Sforce $a_Opts)
+jvm_opts="-J-Duser.home=$BUILD_DIR -J-Xmx512m"
+
+echo | (cd $BUILD_DIR && clojure $jvm_jvm_opts $a_Opts)
 
 # populate profile.d
 PROFILE_PATH="$BUILD_DIR/.profile.d/clojure.sh"
