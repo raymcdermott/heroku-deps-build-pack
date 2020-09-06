@@ -89,7 +89,7 @@ mv $BUILD_DIR/.heroku/clj/bin/clojure $BUILD_DIR/.heroku/clj/bin/clojure.old
 cat $BUILD_DIR/.heroku/clj/bin/clojure.old | sed -e "s/\/tmp\/$(basename $BUILD_DIR)/\/app/g" > $BUILD_DIR/.heroku/clj/bin/clojure
 chmod +x $BUILD_DIR/.heroku/clj/bin/clojure
 
-find $BUILD_DIR -type d
+ls -al $HOME
 
 # repack cache with new assets
 mkdir -p $CACHE_DIR
