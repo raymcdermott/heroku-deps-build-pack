@@ -68,6 +68,15 @@ then
     (cd $BUILD_DIR && clojure $aliases)
 fi
 
+aliases_env=${TEST_ALIASES}
+
+if [[ -n $aliases_env ]]
+then
+    aliases="-A$aliases_env"
+    (cd $BUILD_DIR && clojure $aliases)
+fi
+
+
 
 # populate profile.d
 PROFILE_PATH="$BUILD_DIR/.profile.d/clojure.sh"
