@@ -18,7 +18,7 @@ You may specify one or more aliases to run during the `compile` phase of the dep
 heroku config:set BUILD_ALIASES=":alias1:alias2"
 ```
 
-### Build Aliases [Optional]
+### Test Aliases [Optional]
 
 You may specify one or more aliases to run during the `compile` phase of the deployment using a [config var](https://devcenter.heroku.com/articles/config-vars#managing-config-vars)
 
