@@ -14,10 +14,16 @@ web: clojure -A:my-alias-list
 
 You may specify one or more aliases to run during the `compile` phase of the deployment using a [config var](https://devcenter.heroku.com/articles/config-vars#managing-config-vars)
 
-Here's how you can set the `:test` alias via the CLI
+```
+heroku config:set BUILD_ALIASES=":alias1:alias2"
+```
+
+### Build Aliases [Optional]
+
+You may specify one or more aliases to run during the `compile` phase of the deployment using a [config var](https://devcenter.heroku.com/articles/config-vars#managing-config-vars)
 
 ```
-heroku config:set BUILD_ALIASES=":test"
+heroku config:set TEST_ALIASES=":alias1:alias2"
 ```
 
 :information_source: Any dependencies downloaded during the `compile` phase will be cached.
