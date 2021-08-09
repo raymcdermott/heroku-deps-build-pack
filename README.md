@@ -1,4 +1,4 @@
-# heroku-deps-build-pack
+# heroku-deps-build-pack : deploy without uberjars
 
 A Heroku build pack for Clojure using tools.deps with some special tricks to speed up deployment without uberjars.
 
