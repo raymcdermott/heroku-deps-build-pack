@@ -1,6 +1,20 @@
 # heroku-deps-build-pack
 
-A Heroku build pack for Clojure using tools.deps
+A Heroku build pack for Clojure using tools.deps with some special tricks to speed up deployment without uberjars.
+
+Why not uberjars?
+1) it's extra work and operational activities that need to be created, maintained and could go wrong
+2) after you get it working, are you 100% sure that the CLASSPATH with an uberjar is the same as it is without it?
+3) did you test against the uberjar or the unpacked code?
+4) we have a LISP, don't do this to yourself
+5) you can still do AOT without uberjars, if you really want to. Though you probably don't. But you can.
+6) And no it doesn't need Docker
+
+The Heroku way is kind of like Docker: it builds your program and creates an image for deployment.
+
+This means that you can use the build phase to compile your ClojureScript and pull in all the dependencies for your server.
+
+# Heroku primer
 
 Please read the [standard Heroku docs](https://devcenter.heroku.com/articles/preparing-a-codebase-for-heroku-deployment) for preparing apps.
 
@@ -14,6 +28,8 @@ web: clojure -A:my-alias-list
 
 You may specify one or more aliases to run during the `compile` phase of the deployment using a [config var](https://devcenter.heroku.com/articles/config-vars#managing-config-vars)
 
+This is how you can compile your ClojureScript app and make sure its always fresh.
+
 ```
 heroku config:set BUILD_ALIASES=":alias1:alias2"
 ```
@@ -22,11 +38,15 @@ heroku config:set BUILD_ALIASES=":alias1:alias2"
 
 You may specify one or more aliases to run during the `compile` phase of the deployment using a [config var](https://devcenter.heroku.com/articles/config-vars#managing-config-vars)
 
+This is how you can ensure that your server dependencies are on your CLASSPATH and don't need to be downloaded again when you try to start the server.
+
+One simple test that triggers the server dependency is all that is needed here. No biggieif you have more tests.
+
 ```
 heroku config:set TEST_ALIASES=":alias1:alias2"
 ```
 
-:information_source: Any dependencies downloaded during the `compile` phase will be cached.
+:information_source: Main win: any artefacts built or dependencies downloaded during the `compile` phase will be available at deployment.
 
 ### JVM runtime [Optional]
 
