@@ -13,7 +13,7 @@ On that last point, the Heroku way is kind of like Docker: it builds your progra
 
 The tricks enable you to use the build phase to compile your ClojureScript and pull in all the dependencies for your server.
 
-This means that you can use simple aliases in `deps.edn` that match the way that you develop rather than outsouring the build to complicated external build processes. Except that Heroku is a complicated external build process :)
+This means that you can use simple aliases in `deps.edn` that match the way that you develop rather than outsouring the build to complicated external build processes. Assuming you can ignore that Heroku is a complicated external build process :)
 
 ## Heroku primer
 
