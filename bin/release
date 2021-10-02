@@ -9,7 +9,7 @@ aliases=${ALIASES}
 
 if [[ -n $aliases ]]
 then
-    a_Opts="-A$aliases"
+    a_Opts="-M$aliases"
 fi
 
 # Java opts

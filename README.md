@@ -22,7 +22,7 @@ Please read the [standard Heroku docs](https://devcenter.heroku.com/articles/pre
 Create a `Procfile` in the root of your project to define which alias(es) will be used at startup
 
 ```
-web: clojure -A:my-alias-list
+web: clojure -M:my-alias-list
 ```
 
 ### Build Aliases [Optional]
