@@ -64,7 +64,7 @@ aliases_env=${BUILD_ALIASES}
 
 if [[ -n $aliases_env ]]
 then
-    aliases="-A$aliases_env"
+    aliases="-M$aliases_env"
     (cd $BUILD_DIR && clojure $aliases)
 fi
 
@@ -72,7 +72,7 @@ aliases_env=${TEST_ALIASES}
 
 if [[ -n $aliases_env ]]
 then
-    aliases="-A$aliases_env"
+    aliases="-M$aliases_env"
     (cd $BUILD_DIR && clojure $aliases)
 fi
 
